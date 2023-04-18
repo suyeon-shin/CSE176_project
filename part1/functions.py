@@ -40,7 +40,10 @@ def extract_digits(train_fea, train_gnd, test_fea, test_gnd, digit1, digit2):
 
 def train_validate_test_data(train_fea_3, train_fea_5, test_fea_3, test_fea_5):
     '''
-    From the 
+    From the images, extract train, validate, test set
+
+    output: 
+        x_train, y_train, x_validation, y_validation, x_test, y_test
     '''
     # training set (img 1-1000)
     x_train_3 = train_fea_3[0:1000]
