@@ -1,0 +1,21 @@
+PART1----------------------------------------------------------------------
+GridSearchCV()
+https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
+
+accuracy_score() (compare with score())
+https://scikit-learn.org/stable/modules/generated/sklearn.metrics.accuracy_score.html
+
+metrics
+https://scikit-learn.org/stable/modules/model_evaluation.html
+
+over all??
+https://atmamani.github.io/projects/ml/mnist-digits-classification-using-logistic-regression-scikit-learn/
+
+***
+***
+hyperparameter -> gridsearchcv
+https://towardsdatascience.com/tuning-the-hyperparameters-of-your-machine-learning-model-using-gridsearchcv-7fc2bb76ff27
+***
+***
+
+PART2----------------------------------------------------------------------
