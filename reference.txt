@@ -18,4 +18,14 @@ https://towardsdatascience.com/tuning-the-hyperparameters-of-your-machine-learni
 ***
 ***
 
+haven't looked in depth but looks helpful haha
+https://jakevdp.github.io/PythonDataScienceHandbook/05.03-hyperparameters-and-model-validation.html
+
+
 PART2----------------------------------------------------------------------
+
+
+
+PART3----------------------------------------------------------------------
+TA suggested this so it must be good O_o
+https://scikit-learn.org/stable/modules/feature_extraction.html

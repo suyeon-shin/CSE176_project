@@ -16,9 +16,9 @@ def load_data():
     mnist_mini = loadmat("MNISTmini.mat") #MNISTmini.mat had: train_fea1, train_gnd1, train_fea1, train_gnd1
 
     # extract training features and labels
-    train_fea = pd.DataFrame(mnist_mini["train_fea1"])
+    train_fea = pd.DataFrame(mnist_mini["train_fea1"]) / 255.0
     train_gnd = pd.Series(mnist_mini["train_gnd1"].flatten())   #pd.Series requires a 1D array and flatten() does that
-    test_fea = pd.DataFrame(mnist_mini["test_fea1"])
+    test_fea = pd.DataFrame(mnist_mini["test_fea1"]) / 255.0
     test_gnd = pd.Series(mnist_mini["test_gnd1"].flatten())
 
     return train_fea, train_gnd, test_fea, test_gnd
@@ -62,7 +62,7 @@ def train_validate_test_data(train_fea_3, train_fea_5, test_fea_3, test_fea_5):
 
     y_validation_3 = np.full((1000,1), 3, dtype=np.uint8)
     y_validation_5 = np.full((1000,1), 5, dtype=np.uint8)
-    y_validation = np.concatenate((y_train_3, y_train_5)).ravel() #ravel() is used to reshape y_train from a column vector to a 1D array
+    y_validation = np.concatenate((y_validation_3, y_validation_5)).ravel() #ravel() is used to reshape y_train from a column vector to a 1D array
 
 
     # test set (img 2001-3000)

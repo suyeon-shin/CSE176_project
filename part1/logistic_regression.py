@@ -13,7 +13,6 @@ train_fea_3, train_fea_5, test_fea_3, test_fea_5 = extract_digits(train_fea, tra
 # create train, validation, and test set
 x_train, y_train, x_validation, y_validation, x_test, y_test = train_validate_test_data(train_fea_3, train_fea_5, test_fea_3, test_fea_5)
 
-
 # parameter grid
 parameters = {
     'penalty' : ['l2'], 
@@ -25,33 +24,26 @@ logreg = LogisticRegression()
 clf = GridSearchCV(logreg,                    # model
                    param_grid = parameters,   # hyperparameters
                    scoring='accuracy',        # metric for scoring
-                   cv=10)                     # number of folds
+                   cv=10,                     # number of folds
+                   return_train_score=True)   # return train score
 
 clf.fit(x_train,y_train)
 best_lr = clf.best_estimator_
 
 print("Tuned Hyperparameters :", clf.best_params_)
 print("Accuracy :",clf.best_score_)
-
+# Compare model performance against test set
 print("Logistic Regression Test Accuracy:", metrics.accuracy_score(y_test, best_lr.predict(x_test)))
 
-
-
-#-----------------------------------------------------------------------
-# liblinear_l2 = LogisticRegression(solver = "liblinear", penalty = "l2").fit(x_train, y_train)
-
-# predictions = liblinear_l2.predict(x_test)
-
-# # Use score method to get accuracy of model
-# score = liblinear_l2.score(x_test, y_test)
-# print(score)
-
-# #view confusion matrix
-# cm = metrics.confusion_matrix(y_true=y_test, y_pred = predictions, labels = liblinear_l2.classes_)
-# print(cm)
-
-### for visualizing purposes 
-### delete after testing
-image_size = int(np.sqrt(train_fea.shape[1]))
-# display_images(x_train_3.values[:10], f"first 10 3s", image_size)
-
+# plot the training error and validation error for different C values
+train_errors = 1 - clf.cv_results_['mean_train_score']
+val_errors = 1 - clf.cv_results_['mean_test_score']
+test_errors = 1 - metrics.accuracy_score(y_test, best_lr.predict(x_test))
+plt.semilogx(parameters['C'], train_errors, label='Training Error') # semilogx() Make a plot with log scaling on the x-axis
+plt.semilogx(parameters['C'], val_errors, label='Validation Error')
+plt.semilogx(parameters['C'], [test_errors] * len(parameters['C']), label='Test Error', linestyle='--')
+plt.xlabel('C')
+plt.ylabel('Error')
+plt.legend()
+plt.show()
+#plt.savefig('log_reg.png')
