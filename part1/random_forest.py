@@ -20,8 +20,6 @@ train_fea_3, train_fea_5, test_fea_3, test_fea_5 = extract_digits(train_fea, tra
 x_train, y_train, x_validation, y_validation, x_test, y_test = train_validate_test_data(train_fea_3, train_fea_5,
                                                                                         test_fea_3, test_fea_5)
 
-
-
 # Parameters for the random forests
 params = {'n_estimators': randint(50, 500), 'max_depth': randint(1, 40), 'min_samples_split': randint(2, 10)}
 
@@ -53,10 +51,11 @@ print(metrics.confusion_matrix(y_test, clf.best_estimator_.predict(x_test)))
 train_errors = 1 - clf.cv_results_['mean_train_score']
 val_errors = 1 - clf.cv_results_['mean_test_score']
 test_errors = 1 - metrics.accuracy_score(y_test, best_rf.predict(x_test))
-plt.semilogx([str(p) for p in clf.cv_results_['params']], train_errors, label='Training Error')
-plt.semilogx([str(p) for p in clf.cv_results_['params']], val_errors, label='Validation Error')
-plt.semilogx([str(p) for p in clf.cv_results_['params']], [test_errors] * len(clf.cv_results_['params']), label='Test Error', linestyle='--')
-plt.xlabel('Hyperparameters')
+n_estimators_list = [str(p['n_estimators']) for p in clf.cv_results_['params']]
+plt.plot(n_estimators_list, train_errors, label='Training Error')
+plt.plot(n_estimators_list, val_errors, label='Validation Error')
+plt.plot(n_estimators_list, [test_errors] * len(clf.cv_results_['params']), label='Test Error', linestyle='--')
+plt.xlabel('n_estimators')
 plt.ylabel('Error')
 plt.legend()
 plt.show()
