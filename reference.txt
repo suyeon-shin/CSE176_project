@@ -23,6 +23,19 @@ https://jakevdp.github.io/PythonDataScienceHandbook/05.03-hyperparameters-and-mo
 
 
 PART2----------------------------------------------------------------------
+MNIST.mat
+test_fea: 10000x800
+test_gnd: 10000x1
+train_fea: 60000x800
+train_gnd: 60000x1
+
+MNIST-LeNrt5.mat
+test_fea: 10000x784
+test_gnd: 10000x1
+train_fea: 60000x784
+train_gnd: 60000x1
+
+https://medium.com/analytics-vidhya/xgboost-classifier-hand-written-digit-recognition-219acedfef13
 
 
 
