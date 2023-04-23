@@ -1,5 +1,4 @@
 from functions import *
-
 from sklearn.ensemble import RandomForestClassifier
 from sklearn import metrics
 from sklearn.model_selection import RandomizedSearchCV
@@ -20,41 +19,36 @@ train_fea_3, train_fea_5, test_fea_3, test_fea_5 = extract_digits(train_fea, tra
 x_train, y_train, x_validation, y_validation, x_test, y_test = train_validate_test_data(train_fea_3, train_fea_5,
                                                                                         test_fea_3, test_fea_5)
 
-# Parameters for the random forests
-params = {'n_estimators': randint(50, 500), 'max_depth': randint(1, 40), 'min_samples_split': randint(2, 10)}
+# Set fixed hyperparameters
+params = {'max_depth': 10, 'min_samples_split': 2}
 
-# Create classification forest
-forest = RandomForestClassifier()
+# Vary n_estimators
+n_estimators = [10, 50, 100, 200, 300, 400, 500]
 
-# Find optimal hyperparameters using randomized search
-clf = RandomizedSearchCV(forest, param_distributions=params, n_iter=5, cv=5, return_train_score=True)
+train_errors = []
+val_errors = []
+test_errors = []
 
-clf.fit(x_train, y_train)
-best_rf = clf.best_estimator_
+for n in n_estimators:
+    # Create classification forest
+    forest = RandomForestClassifier(n_estimators=n, **params)
 
-# Train the model with the data and randomized search hyperparamters
-# clf.fit(x_train, y_train)
+    # Fit model to training data
+    forest.fit(x_train, y_train)
 
-# Now with validation set
-#clf.fit(x_validation, y_validation)
+    # Calculate training and validation errors
+    train_error = 1 - metrics.accuracy_score(y_train, forest.predict(x_train))
+    val_error = 1 - metrics.accuracy_score(y_validation, forest.predict(x_validation))
+    test_error = 1 - metrics.accuracy_score(y_test, forest.predict(x_test))
 
-print("Tuned Hyperparameters :", clf.best_params_)  # Display best hyperparameters
-print("Accuracy :", clf.best_score_)  # Display the accuracy
+    train_errors.append(train_error)
+    val_errors.append(val_error)
+    test_errors.append(test_error)
 
-# Display the accuracy on the test set
-print("Random Forests Test Accuracy:", metrics.accuracy_score(y_test, clf.best_estimator_.predict(x_test)))
-
-# Display confusion matrix
-print(metrics.confusion_matrix(y_test, clf.best_estimator_.predict(x_test)))
-
-# plot the training error and validation error for different hyperparameters
-train_errors = 1 - clf.cv_results_['mean_train_score']
-val_errors = 1 - clf.cv_results_['mean_test_score']
-test_errors = 1 - metrics.accuracy_score(y_test, best_rf.predict(x_test))
-n_estimators_list = [str(p['n_estimators']) for p in clf.cv_results_['params']]
-plt.plot(n_estimators_list, train_errors, label='Training Error')
-plt.plot(n_estimators_list, val_errors, label='Validation Error')
-plt.plot(n_estimators_list, [test_errors] * len(clf.cv_results_['params']), label='Test Error', linestyle='--')
+# Plot results
+plt.semilogx(n_estimators, train_errors, label='Training Error')
+plt.semilogx(n_estimators, val_errors, label='Validation Error')
+plt.semilogx(n_estimators, test_errors, label='Test Error', linestyle='--')
 plt.xlabel('n_estimators')
 plt.ylabel('Error')
 plt.legend()
