@@ -8,30 +8,41 @@ import json
 from sklearn.model_selection import train_test_split
 import lightgbm as lgb
 from sklearn.feature_extraction import DictVectorizer
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfTransformer
 
 # Load the json file into a var
 data_set = pd.read_json("News_Category_Dataset_v3.json", lines=True)
 
-X = data_set[['link', 'headline', 'short_description', 'authors', 'date']]  # Declare the feature vectors
-y = data_set['category']  # Declare the target variable
+# Create vectorizor
+vec = CountVectorizer()
+# print(vec)
 
-# Separate the data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
+# Tokenize and count work occurrences in the headlines
+# print(data_set['headline'])
+corpus = data_set['headline']
 
-# X_train.info()
-for feature in X_train:
-    X_train[feature] = pd.Series(X_train[feature], dtype="category")
-    X_test[feature] = pd.Series(X_test[feature], dtype="category")
+# Fit the word occurences into the vectorizor and assign to a variable
+X = vec.fit_transform(corpus)
 
-y_train = y_train.astype('category')
-y_test = y_test.astype('category')
+# Tokenize all words that are at least two characters long
+analyze = vec.build_analyzer()
+for headline in data_set['headline']:
+    analyze(headline)
+
+# Retrieve words in their array indecies
+vec.get_feature_names_out()
+X.toarray()
 
 
-# X_train.info()
-# # X_test.info()
-# y_train.info()
-# # y_test.info()
+# Transformer for normalizing
+transformer = TfidfTransformer(smooth_idf=False)
 
-# Create the lightgbm model
-clf = lgb.LGBMClassifier()
-clf.fit(X_train, y_train)
+# Fit the headlines to the transformer
+megatron = transformer.fit_transform(X)
+print(megatron.toarray()) # Print them
+
+# Does everything that was just done but in one go
+# from sklearn.feature_extraction.text import TfidfVectorizer
+# vectorizer = TfidfVectorizer()
+# vectorizer.fit_transform(corpus)
