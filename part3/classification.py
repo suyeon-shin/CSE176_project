@@ -46,3 +46,24 @@ print(megatron.toarray()) # Print them
 # from sklearn.feature_extraction.text import TfidfVectorizer
 # vectorizer = TfidfVectorizer()
 # vectorizer.fit_transform(corpus)
+
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(megatron, data_set['category'], test_size=0.2)
+
+# Create a LightGBM dataset object
+train_data = lgb.Dataset(X_train, label=y_train)
+
+# Set hyperparameters for the LightGBM model
+params = {
+    'objective': 'binary',
+    'metric': 'binary_logloss',
+    'boosting_type': 'gbdt',
+    'num_leaves': 31,
+    'learning_rate': 0.05
+}
+
+# Train the LightGBM model
+model = lgb.train(params, train_data)
+
+# Evaluate the model on the testing set
+y_pred = model.predict(X_test)
