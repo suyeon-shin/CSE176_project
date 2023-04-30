@@ -1,0 +1,21 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+#Define the features to be used
+features = ['wtd_entropy_atomic_mass', 'wtd_entropy_ThermalConductivity', 'wtd_range_atomic_radius',
+'wtd_std_atomic_radius', 'wtd_range_fie', 'wtd_entropy_ElectronAffinity',
+'wtd_std_ThermalConductivity', 'wtd_entropy_Density', 'wtd_range_atomic_mass', 'wtd_range_Valence',
+'wtd_entropy_FusionHeat', 'wtd_std_Valence', 'wtd_gmean_fie', 'wtd_entropy_Valence',
+'wtd_entropy_atomic_radius', 'wtd_entropy_fie', 'wtd_mean_Density', 'wtd_mean_fie',
+'wtd_gmean_ElectronAffinity', 'wtd_gmean_ThermalConductivity','critical_temp']
+
+#Load the dataset
+data_file = pd.read_csv(r'C:\rbi_reg_cs_176\venv\train.csv')
+
+#Create a heatmap of the correlations between the features
+sns.set(font_scale=0.65)
+corr = data_file[features].corr()
+plt.figure(figsize=(20, 20))
+sns.heatmap(corr, cmap='coolwarm', cbar=True, annot=True, annot_kws={'size': 10})
+plt.show()
