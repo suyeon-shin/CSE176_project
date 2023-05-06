@@ -25,6 +25,7 @@ x_train, y_train, x_test, y_test = load_data()
 # y_train starts from 0 but not 1
 le = LabelEncoder()
 y_train = le.fit_transform(y_train)
+y_test = le.fit_transform(y_test)
 
 # Define the specific hyperparameters we're searching for
 param_dist = {'learning_rate': uniform(0, 1),
@@ -53,7 +54,7 @@ print(f"Execution time: {end_time - start_time} seconds")
 
 # Get and print out the accuracy
 accuracy = accuracy_score(y_test, y_pred)
-print("Accuracy: %.2f%%" % ((1 - accuracy) * 100.0))
+print("Accuracy: %.2f%%" % (accuracy * 100.0))
 
 # Display the confusion matrix
 confusion = confusion_matrix(y_test, y_pred)
